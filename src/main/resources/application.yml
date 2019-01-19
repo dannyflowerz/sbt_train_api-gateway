@@ -1,0 +1,36 @@
+spring:
+  application:
+    name: api-gateway
+zuul:
+  prefix: /api
+  # disable automatic creation of dynamic routes for services registered with Eureka
+  # e.g. /inventory-service/products/** --> [INVENTORY_SERVICE_URL]/products/**
+  # we don't want to reveal internal structure like "inventory-service"
+  ignored-services: '*'
+  routes:
+    # [API_GATEWAY_URL]/api/products/** --> [INVENTORY_SERVICE_URL]/products/**
+    products:
+      path: /products/**
+      serviceId: inventory-service
+      # would strip "products" - we don't want that
+      strip-prefix: false
+    # [API_GATEWAY_URL]/api/orders/** --> [ORDER_SERVICE_URL]/orders/**
+    orders:
+      path: /orders/**
+      serviceId: order-service
+      strip-prefix: false
+    # [API_GATEWAY_URL]/api/confirmations/** --> [CONFIRMATION_SERVICE_URL]/confirmations/**
+    confirmations:
+      path: /confirmations/**
+      serviceId: shipping-service
+      strip-prefix: false
+eureka:
+  client:
+    service-url:
+      default-zone: ${EUREKA_URI:http://localhost:8761/eureka}
+management:
+  endpoints:
+    web:
+      exposure:
+        # unsafe!
+        include: '*'
