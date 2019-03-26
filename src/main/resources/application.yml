@@ -26,10 +26,10 @@ zuul:
       strip-prefix: false
 eureka:
   client:
-    service-url:
-      default-zone: http://35.246.58.40:8761/eureka
+    serviceUrl:
+      defaultZone: ${EUREKA_URI:http://localhost:8761/eureka}
   instance:
-    prefer-ip-address: true
+    preferIpAddress: true
 management:
   endpoints:
     web:
